@@ -4,6 +4,9 @@ import requests
 import logging
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=os.environ.get('LOG_LEVEL', 'INFO'),
