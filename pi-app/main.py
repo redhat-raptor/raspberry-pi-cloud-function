@@ -4,7 +4,10 @@ import requests
 import logging
 import os
 
-logging.basicConfig(level=os.environ.get('LOG_LEVEL', 'INFO'))
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=os.environ.get('LOG_LEVEL', 'INFO'),
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 DHT_SENSOR = Adafruit_DHT.DHT11
 DHT_PIN = None
@@ -12,7 +15,7 @@ DHT_PIN = None
 try:
     DHT_PIN = int(os.environ.get('DHT_PIN'))
 except Exception as e:
-    logging.error('DHT_PIN is not set in the env or invalid DHT_PIN!', e)
+    logging.error('DHT_PIN is not set in the env or invalid DHT_PIN!')
     exit(1)
 
 SERVICE_HTTP_URL=os.environ.get('SERVICE_HTTP_URL');
@@ -26,14 +29,16 @@ while True:
     humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
 
     if humidity is not None and temperature is not None:
-        logging.info("Temp={0:0.1f}C Humidity={1:0.1f}%".format(temperature, humidity))
+        logging.info("Received Temp={0:0.1f}C Humidity={1:0.1f}% from sensor".format(temperature, humidity))
         response = ''
         try:
-            response = requests.get(f'https://sls-cus-dev-pi-sensor.azurewebsites.net/api/temp?temp={temperature}')
+            response = requests.get(f'{SERVICE_HTTP_URL}?temp={temperature}')
         except Exception as e:
             logging.error(e)
         else:
             logging.info(f'Received response from cloud function: {response.text}')
+            logging.info('HTTP API took %s seconds', response.elapsed.total_seconds())
+            logging.info('HTTP API request size in bytes %s', len(response.content))
     else:
         logging.warning("Sensor failure. Check wiring.");
 
