@@ -14,11 +14,10 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
-
-- script:
-  workingDirectory: cloud-functions
+  
 - script: |
     npm install -g serverless
     npm install
     sls deploy
   displayName: 'npm install and serverless deploy'
+  workingDirectory: cloud-functions
