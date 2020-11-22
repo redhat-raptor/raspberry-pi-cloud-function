@@ -21,3 +21,8 @@ steps:
     sls deploy
   displayName: 'npm install and serverless deploy'
   workingDirectory: cloud-functions
+  env:
+    AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+    AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+    AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+    AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
