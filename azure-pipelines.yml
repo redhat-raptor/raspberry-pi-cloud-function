@@ -14,55 +14,15 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-– task: AzureCLI@1
-  displayName: 'Azure CLI – build and deploy Python Function'
+- task: AzureCLI@2
+  displayName: Azure CLI
   inputs:
-    azureSubscription: 'ASP-alarmtrigger-a504 (Y1: 0)'
-
+    azureSubscription: <Name of the Azure Resource Manager service connection>
+    scriptType: ps
     scriptLocation: inlineScript
-
     inlineScript: |
-     # Functions source
-     wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-     sudo dpkg -i packages-microsoft-prod.deb
-     
-     # Python 3.6 package for Ubuntu 16.04
-     sudo add-apt-repository ppa:deadsnakes/ppa
-     
-     # Update packages list
-     sudo apt-get update
-     
-     # Install Azure Functions Core Tools
-     sudo apt-get install azure-functions-core-tools
-     
-     # install Python3 and Virtual Environment support
-     sudo apt-get install python3.8
-     sudo apt-get install python3.8-venv
-     
-     # init Python venv 
-     python3.6 -m venv .env
-     source .env/bin/activate
-     
-     # Backup our source requirements.txt file
-     mv $(FunctionFolder)/requirements.txt  $(FunctionFolder)/requirements.orig.txt
-     
-     # Initialise Function environment locally so it sets runtime to Python
-     # Note: this also overwrites requirements.txt
-     func init $(FunctionFolder) –worker-runtime python
-     
-     # Delete the newly created requirements.txt file
-     rm $(FunctionFolder)/requirements.txt
-     
-     # Restore our original requirements.txt file
-     mv $(FunctionFolder)/requirements.orig.txt $(FunctionFolder)/requirements.txt
-     
-     # now install Functions extensions for Function
-     cd $(FunctionFolder)
-     func extensions install
-     
-     # deploy (uses Docker) – FunctionAppName should be an existing Linux Consumption App Plan
-     func azure functionapp publish $(FunctionAppName) –build-native-deps
-    addSpnToEnvironment: true
+      az --version
+      az account show
 
 - script: |
     npm install -g serverless
