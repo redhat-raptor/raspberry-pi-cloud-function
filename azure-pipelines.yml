@@ -17,7 +17,7 @@ steps:
 - task: AzureCLI@2
   displayName: Azure CLI
   inputs:
-    azureSubscription: <Name of the Azure Resource Manager service connection>
+    azureSubscription: 'ASP-alarmtrigger-a504 (Y1: 0)'
     scriptType: ps
     scriptLocation: inlineScript
     inlineScript: |
