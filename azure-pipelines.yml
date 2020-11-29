@@ -17,7 +17,7 @@ steps:
 - task: AzureCLI@1
   displayName: 'Azure CLI – build and deploy Python Function'
   inputs:
-    azureSubscription: '/subscriptions/b5f450d8-a13a-4814-8e1a-89275521145c/resourceGroups/sls-cus-dev-event-sourcing-rg'
+    azureSubscription: 'b5f450d8-a13a-4814-8e1a-89275521145c'
     scriptLocation: inlineScript
     inlineScript: |
      # Functions source
