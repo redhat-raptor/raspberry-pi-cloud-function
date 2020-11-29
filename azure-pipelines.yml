@@ -17,7 +17,7 @@ steps:
 - task: AzureCLI@1
   displayName: 'Azure CLI – build and deploy Python Function'
   inputs:
-    azureSubscription: '$(AZURE_SUBSCRIPTION_ID)'
+    azureSubscription: $(AZURE_SUBSCRIPTION_ID)
     connectedServiceNameARM: $(AzureSubscriptionEndpointId)
     scriptLocation: inlineScript
     inlineScript: |
