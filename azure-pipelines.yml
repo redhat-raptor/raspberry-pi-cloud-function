@@ -17,7 +17,7 @@ steps:
 - task: AzureCLI@2
   displayName: Azure CLI
   inputs:
-    azureSubscription: 'Azure for Students'
+    azureSubscription: 'ASP-alarmtrigger-a504'
     scriptType: ps
     scriptLocation: inlineScript
     inlineScript: |
