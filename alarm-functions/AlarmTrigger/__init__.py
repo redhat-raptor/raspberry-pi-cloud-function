@@ -33,9 +33,9 @@ def main(documents: func.DocumentList) -> str:
 
 def send_email(temp):
     message = f"""\
-    Subject: High Temperature Alarm: {temp}   
+Subject: High Temperature Alarm: {temp}   
 
-    Sensor has detected that temperature is as high as: {temp}."""
+Sensor has detected that the temperature is as high as: {temp}."""
 
     with smtplib.SMTP(smtp_server, port) as server:
         server.ehlo()
@@ -52,7 +52,7 @@ def send_sms(temp):
 
     message = client.messages \
         .create(
-        body=f"Sensor has detected that temperature is as high as: {temp}",
+        body=f"Sensor has detected that the temperature is as high as: {temp}",
         from_=os.environ['TWILIO_FROM'],
         to=os.environ['TWILIO_TO']
     )
