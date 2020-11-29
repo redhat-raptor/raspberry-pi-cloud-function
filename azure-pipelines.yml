@@ -13,18 +13,6 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
-  
-- script: |
-    npm install -g serverless
-    npm install
-    sls deploy
-  displayName: 'npm install and serverless deploy'
-  workingDirectory: cloud-functions
-  env:
-    AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-    AZURE_TENANT_ID: $(AZURE_TENANT_ID)
-    AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
-    AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
 
 – task: AzureCLI@1
   displayName: 'Azure CLI – build and deploy Python Function'
@@ -75,3 +63,15 @@ steps:
      # deploy (uses Docker) – FunctionAppName should be an existing Linux Consumption App Plan
      func azure functionapp publish $(FunctionAppName) –build-native-deps
     addSpnToEnvironment: true
+
+- script: |
+    npm install -g serverless
+    npm install
+    sls deploy
+  displayName: 'npm install and serverless deploy'
+  workingDirectory: cloud-functions
+  env:
+    AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+    AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+    AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+    AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
