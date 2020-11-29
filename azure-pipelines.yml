@@ -18,7 +18,6 @@ steps:
   displayName: 'Azure CLI – build and deploy Python Function'
   inputs:
     azureSubscription: 'b5f450d8-a13a-4814-8e1a-89275521145c'
-    connectedServiceNameARM: $(AzureSubscriptionEndpointId)
     scriptLocation: inlineScript
     inlineScript: |
      # Functions source
