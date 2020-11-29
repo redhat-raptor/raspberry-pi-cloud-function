@@ -17,7 +17,7 @@ steps:
 - task: AzureCLI@2
   displayName: Azure CLI
   inputs:
-    azureSubscription: 'ASP-alarmtrigger-a504'
+    azureSubscription: '$(AZURE_SUBSCRIPTION_ID)'
     scriptType: ps
     scriptLocation: inlineScript
     inlineScript: |
