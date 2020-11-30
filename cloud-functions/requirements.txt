@@ -1,2 +1,14 @@
-azure.functions
-azure-functions-worker
+azure-core==1.9.0
+azure-cosmos==4.2.0
+azure-functions==1.5.0
+azure-functions-worker==1.1.9
+certifi==2020.11.8
+chardet==3.0.4
+grpcio==1.33.2
+grpcio-tools==1.33.2
+idna==2.10
+protobuf==3.14.0
+random-object-id==2.0.0
+requests==2.25.0
+six==1.15.0
+urllib3==1.26.2

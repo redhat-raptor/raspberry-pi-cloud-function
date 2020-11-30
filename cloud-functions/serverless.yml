@@ -1,61 +1,24 @@
 service: pi-sensor
-
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
 frameworkVersion: '2'
 
 provider:
   name: azure
   region: Central US
-  runtime: python3.6 # python3.7 or python3.8 also available
-  # os: linux  # linux is the only operating system available for python
-  # prefix: "sample"  # prefix of generated resource name
-  # subscriptionId: A356AC8C-E310-44F4-BF85-C7F29044AF99
-  # stage: dev
-  # type: premium  # premium azure functions
+  runtime: python3.8
 
-  environment: # these will be created as application settings
-    VARIABLE_FOO: 'foo'
+  environment:
     AZURE_SUBSCRIPTION_ID: ${env:AZURE_SUBSCRIPTION_ID}
     AZURE_TENANT_ID: ${env:AZURE_TENANT_ID}
     AZURE_CLIENT_ID: ${env:AZURE_CLIENT_ID}
     AZURE_CLIENT_SECRET: ${env:AZURE_CLIENT_SECRET}
-
-  # you can define apim configuration here
-  # apim:
-  #   apis:
-  #     - name: v1
-  #       subscriptionRequired: false # if true must provide an api key
-  #       displayName: v1
-  #       description: V1 sample app APIs
-  #       protocols:
-  #         - https
-  #       path: v1
-  #       tags:
-  #         - tag1
-  #         - tag2
-  #       authorization: none
-  #   cors:
-  #     allowCredentials: false
-  #     allowedOrigins:
-  #       - "*"
-  #     allowedMethods:
-  #       - GET
-  #       - POST
-  #       - PUT
-  #       - DELETE
-  #       - PATCH
-  #     allowedHeaders:
-  #       - "*"
-  #     exposeHeaders:
-  #       - "*"
+    AZURE_COSMOS_URL: ${env:AZURE_COSMOS_URL}
+    AZURE_COSMOS_KEY: ${env:AZURE_COSMOS_KEY}
+    AZURE_COSMOS_DATABASE_NAME: ${env:AZURE_COSMOS_DATABASE_NAME}
+    AZURE_COSMOS_CONTAINER_NAME: ${env:AZURE_COSMOS_CONTAINER_NAME}
 
 plugins:
   - serverless-azure-functions
 package:
-  # include:
-  #   - include-me.py
-  #   - include-me-dir/**
   exclude:
     - env/**
     - .env/**
@@ -69,8 +32,6 @@ package:
     - package-lock.json
     - .gitignore
     - .git/**
-  # - exclude-me.py
-  # - exclude-me-dir/**
 
 functions:
   temp:
@@ -80,13 +41,3 @@ functions:
         methods:
           - GET
         authLevel: anonymous
-
-  # eventhub:
-  #   handler: src/handlers/eventHub
-  #   events:
-  #     - eventHub:
-  #       x-azure-settings:
-  #         name: eventHubMessages # Specifies which name it's available on `context`
-  #         eventHubName: sample-hub # Specifies the Name of the Event Hub
-  #         consumerGroup: $Default # Specifies the consumerGroup to listen with
-  #         connection: EVENT_HUBS_CONNECTION # App Setting/environment variable which contains Event Hubs Namespace Connection String
