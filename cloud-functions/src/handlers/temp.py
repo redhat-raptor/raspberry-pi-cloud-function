@@ -75,5 +75,3 @@ def _save(temp, hum):
     )
 
     return result
-
-# _save(31, 10)
