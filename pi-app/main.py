@@ -30,8 +30,11 @@ if not SERVICE_HTTP_URL:
 
 while True:
     humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
-
     if humidity is not None and temperature is not None:
+
+        humidity = int(humidity)
+        temperature = int(temperature)
+
         logging.info("Received Temp={0:0.1f}C Humidity={1:0.1f}% from sensor".format(temperature, humidity))
         response = ''
         try:
