@@ -6,3 +6,13 @@ This repo uses Serverless framework to:
 1. Create HTTP endpoints
 1. HTTP endpoints trigger Azure functions
 1. Azure functions validate the requests and insert data into Azure CosmosDB
+
+
+# Setup credentials for cosmosdb
+```
+RES_GROUP=<resource-group-name>
+ACCT_NAME=<cosmos-db-account-name>
+
+export ACCOUNT_URI=$(az cosmosdb show --resource-group $RES_GROUP --name $ACCT_NAME --query documentEndpoint --output tsv)
+export ACCOUNT_KEY=$(az cosmosdb list-keys --resource-group $RES_GROUP --name $ACCT_NAME --query primaryMasterKey --output tsv)
+```

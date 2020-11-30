@@ -21,7 +21,7 @@ except Exception as e:
     logging.error('DHT_PIN is not set in the env or invalid DHT_PIN!')
     exit(1)
 
-SERVICE_HTTP_URL=os.environ.get('SERVICE_HTTP_URL');
+SERVICE_HTTP_URL = os.environ.get('SERVICE_HTTP_URL')
 
 if not SERVICE_HTTP_URL:
     logging.error('SERVICE_HTTP_URL is not set in the env')
@@ -35,7 +35,7 @@ while True:
         logging.info("Received Temp={0:0.1f}C Humidity={1:0.1f}% from sensor".format(temperature, humidity))
         response = ''
         try:
-            response = requests.get(f'{SERVICE_HTTP_URL}?temp={temperature}')
+            response = requests.get(f'{SERVICE_HTTP_URL}?temp={temperature}&hum={humidity}')
         except Exception as e:
             logging.error(e)
         else:
@@ -43,6 +43,6 @@ while True:
             logging.info('HTTP API took %s seconds', response.elapsed.total_seconds())
             logging.info('HTTP API request size in bytes %s', len(response.content))
     else:
-        logging.warning("Sensor failure. Check wiring.");
+        logging.warning("Sensor failure. Check wiring.")
 
-    time.sleep(3);
+    time.sleep(3)

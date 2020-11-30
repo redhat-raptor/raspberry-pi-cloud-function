@@ -1,24 +1,61 @@
 import logging
-
+import os
 import azure.functions as func
+from azure.cosmos import CosmosClient
+from random_object_id import generate
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    temp = req.params.get('temp')
-    if not temp:
+    # Access temperature/humidity
+    try:
+        temp = get_request_param(req, 'temp')
+        hum = get_request_param(req, 'hum')
+    except Exception as e:
+        return func.HttpResponse(
+            f"Please pass temperature and humidity in the query string or in the request body. Error: {e}",
+            status_code=400
+        )
+
+    # Store in database
+    try:
+        save(temp, hum)
+    except Exception as e:
+        return func.HttpResponse(
+            f"Error saving into db: {e}",
+            status_code=500
+        )
+
+
+def get_request_param(req, param_name) -> int:
+    param = req.params.get(param_name)
+
+    if not param:
         try:
             req_body = req.get_json()
         except ValueError:
             pass
         else:
-            temp = req_body.get('temp')
+            param = req_body.get(param_name)
 
-    if temp:
-        return func.HttpResponse(f"Temp received {temp}!")
-    else:
-        return func.HttpResponse(
-             "Please pass a temp on the query string or in the request body",
-             status_code=400
-        )
+    return int(param)
+
+
+def save(temp, hum):
+    url = os.environ.get('AZURE_COSMOS_URL')
+    key = os.environ.get('AZURE_COSMOS_KEY')
+    client = CosmosClient(url, credential=key)
+
+    database_name = os.environ.get('AZURE_COSMOS_DATABASE_NAME')
+    container_name = os.environ.get('AZURE_COSMOS_CONTAINER_NAME')
+
+    database_client = client.get_database_client(database_name)
+    container_client = database_client.get_container_client(container_name)
+
+    container_client.upsert_item({
+            'id': generate(),
+            'temperature': temp,
+            'humidity': hum
+        }
+    )
