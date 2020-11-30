@@ -14,7 +14,7 @@ steps:
     npm install -g serverless
     npm install
     sls deploy
-  displayName: 'npm install and serverless deploy'
+  displayName: 'npm install and serverless remove --force'
   workingDirectory: cloud-functions
   env:
     AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
