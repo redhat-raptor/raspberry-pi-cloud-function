@@ -15,8 +15,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     # Access temperature/humidity
     try:
-        temp = get_request_param(req, 'temp')
-        hum = get_request_param(req, 'hum')
+        temp = _get_request_param(req, 'temp')
+        hum = _get_request_param(req, 'hum')
     except Exception as e:
         logging.error('Error getting temp and hum from request: ', e)
         return func.HttpResponse(
@@ -28,7 +28,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     # Store in database
     try:
-        save(temp, hum)
+        _save(temp, hum)
     except Exception as e:
         logging.error('Error storing into db: ', e)
         return func.HttpResponse(
@@ -39,7 +39,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info(f'Successfully stored in DB')
 
 
-def get_request_param(req, param_name) -> int:
+def _get_request_param(req, param_name) -> int:
     param = req.params.get(param_name)
 
     if not param:
@@ -53,7 +53,7 @@ def get_request_param(req, param_name) -> int:
     return int(param)
 
 
-def save(temp, hum):
+def _save(temp, hum):
     url = os.environ.get('AZURE_COSMOS_URL')
     key = os.environ.get('AZURE_COSMOS_KEY')
     client = CosmosClient(url, credential=key)
