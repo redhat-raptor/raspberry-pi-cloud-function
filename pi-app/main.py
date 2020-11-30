@@ -36,6 +36,7 @@ while True:
         response = ''
         try:
             response = requests.get(f'{SERVICE_HTTP_URL}?temp={temperature}&hum={humidity}')
+            print(response.content)
         except Exception as e:
             logging.error(e)
         else:
