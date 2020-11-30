@@ -4,7 +4,7 @@ import azure.functions as func
 import smtplib, ssl
 from twilio.rest import Client
 
-temperature_threshold = os.environ.get('TEMPERATURE_THRESHOLD', 30)
+temperature_threshold = int(os.environ.get('TEMPERATURE_THRESHOLD', 30))
 
 # Email configs
 port = 587
@@ -20,13 +20,12 @@ def main(documents: func.DocumentList) -> str:
         return ''
 
     item = documents[0]
-    if item.get('type', None) == 'temperature':
-        temp = item.get('value', None)
-        if temp <= 30:
-            return ''
+    temperature = int(item.get('temperature', 0))
+    if temperature <= temperature_threshold:
+        return ''
 
-        send_email(temp)
-        send_sms(temp)
+    send_email(temperature)
+    send_sms(temperature)
 
     logging.info('Document id: %s', documents[0])
 
@@ -50,11 +49,9 @@ def send_sms(temp):
     auth_token = os.environ['TWILIO_AUTH_TOKEN']
     client = Client(account_sid, auth_token)
 
-    message = client.messages \
-        .create(
+    message = client.messages.create(
         body=f"Sensor has detected that the temperature is as high as: {temp}",
         from_=os.environ['TWILIO_FROM'],
-        to=os.environ['TWILIO_TO']
-    )
+        to=os.environ['TWILIO_TO'])
 
     print(f'Twilio message sent with id {message.sid}')
