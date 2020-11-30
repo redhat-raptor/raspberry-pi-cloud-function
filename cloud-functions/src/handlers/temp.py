@@ -31,7 +31,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         result = _save(temp, hum)
     except Exception as e:
-        logging.error(f'Error storing into db: {e}')
+        logging.exception(f'Error storing into db: {e}')
         return func.HttpResponse(
             f"Error saving into db: {e}",
             status_code=500
