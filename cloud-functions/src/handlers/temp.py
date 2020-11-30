@@ -3,6 +3,7 @@ import os
 import azure.functions as func
 from azure.cosmos import CosmosClient
 from random_object_id import generate
+import json
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -18,9 +19,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         temp = _get_request_param(req, 'temp')
         hum = _get_request_param(req, 'hum')
     except Exception as e:
-        logging.error('Error getting temp and hum from request: ', e)
+        logging.error(f'Error getting temp and hum from request: {e}')
         return func.HttpResponse(
-            f"Please pass temperature and humidity in the query string or in the request body. Error: {e}",
+            f"Please pass temperature and humidity in the query string or in the request body!",
             status_code=400
         )
 
@@ -28,15 +29,17 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     # Store in database
     try:
-        _save(temp, hum)
+        result = _save(temp, hum)
     except Exception as e:
-        logging.error('Error storing into db: ', e)
+        logging.error(f'Error storing into db: {e}')
         return func.HttpResponse(
             f"Error saving into db: {e}",
             status_code=500
         )
 
-    logging.info(f'Successfully stored in DB')
+    logging.info(f'Successfully stored in DB!')
+
+    return func.HttpResponse(json.dumps(result))
 
 
 def _get_request_param(req, param_name) -> int:
@@ -64,9 +67,11 @@ def _save(temp, hum):
     database_client = client.get_database_client(database_name)
     container_client = database_client.get_container_client(container_name)
 
-    container_client.upsert_item({
+    result = container_client.upsert_item({
             'id': generate(),
             'temperature': temp,
             'humidity': hum
         }
     )
+
+    return result

@@ -1,5 +1,4 @@
-service: pi-sensor-temperature
-
+service: pi-sensor
 frameworkVersion: '2'
 
 provider:
