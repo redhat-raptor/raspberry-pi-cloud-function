@@ -4,6 +4,11 @@ import azure.functions as func
 from azure.cosmos import CosmosClient
 from random_object_id import generate
 
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=os.environ.get('LOG_LEVEL', 'INFO'),
+    datefmt='%Y-%m-%d %H:%M:%S')
+
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
@@ -13,19 +18,25 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         temp = get_request_param(req, 'temp')
         hum = get_request_param(req, 'hum')
     except Exception as e:
+        logging.error('Error getting temp and hum from request: ', e)
         return func.HttpResponse(
             f"Please pass temperature and humidity in the query string or in the request body. Error: {e}",
             status_code=400
         )
 
+    logging.info(f'Received temperature {temp} and humidity {hum}')
+
     # Store in database
     try:
         save(temp, hum)
     except Exception as e:
+        logging.error('Error storing into db: ', e)
         return func.HttpResponse(
             f"Error saving into db: {e}",
             status_code=500
         )
+
+    logging.info(f'Successfully stored in DB')
 
 
 def get_request_param(req, param_name) -> int:
